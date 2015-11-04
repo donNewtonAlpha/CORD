@@ -9,7 +9,7 @@ chmod 755 /usr/bin/pipework
 apt-get install mongodb
 
 ADD lan network interfaces
-...
+```
 for i in `seq 2 12`
    do 
    ip link add link $LAN_INTERFACE $LAN_INTERFACE.$i type vlan proto 802.1ad id $i
@@ -20,8 +20,7 @@ for i in `seq 2 12`
       ip link set $LAN_INTERFACE.$i.$j up
    done
 done
-
-...
+```
 
 nohup node-red 2>&1 &
 http://$NODE_RED_IP:1880
