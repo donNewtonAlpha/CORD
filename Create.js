@@ -16,17 +16,27 @@ module.exports = function(RED) {
             }
             console.log(cmd);
             
-            var outcome=child_process.execSync(cmd);
-            var strOutcome=decoder.write(outcome);
-            //need to rename container
-            cmd="docker rename " + strOutcome.trim() + " "+container;
-            console.log(cmd);
-            outcome=child_process.execSync(cmd);
-           
-            console.log(decoder.write(outcome));
-            msg.payload.result=decoder.write(outcome);
-            msg.payload.container="created";
-            node.send(msg);
+            child_process.exec(cmd,function(error,stdout,stderr){
+		    var strOutcome=decoder.write(stdout);
+                    console.log("error:"+error+" stdout:"+stdout+" stderr:"+stderr);
+		    //need to rename container
+                    if(error!=null){
+		       msg.payload.container="Error";
+		       msg.payload.error=stderr;
+		       node.send(msg);
+		       return;
+                    }
+		    cmd="docker rename " + strOutcome.trim() + " "+container;
+		    console.log(cmd);
+		    child_process.exec(cmd,function(error,stdout,stderr){
+                            console.log("stdout:"+stdout);
+			    console.log(decoder.write(stdout));
+                            
+			    msg.payload.result=container;
+			    msg.payload.container="created";
+			    node.send(msg);
+		    });
+            });
         });
     }
     RED.nodes.registerType("create",CreateNode);
