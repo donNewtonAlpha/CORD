@@ -10,11 +10,18 @@ module.exports = function(RED) {
             var cmd=["docker start " + container]; 
             console.log(cmd);
             
-            var outcome=child_process.execSync(cmd);
-            console.log(decoder.write(outcome));
-            msg.payload.container="started";
-            msg.payload.result=decoder.write(outcome);
-            node.send(msg);
+            child_process.exec(cmd,function(error,stdout,stderr){
+               if(error!=null){
+                 msg.payload.container="Error";
+		 msg.payload.error=stderr;
+		 node.send(msg);
+		 return;
+               }
+               console.log(decoder.write(stdout));
+               msg.payload.container="started";
+               msg.payload.result=decoder.write(stdout);
+               node.send(msg);
+            });
         });
     }
     RED.nodes.registerType("start",StartNode);
