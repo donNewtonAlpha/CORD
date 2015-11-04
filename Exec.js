@@ -12,33 +12,27 @@ module.exports = function(RED) {
             var command=msg.payload.command;
             cmd="docker exec " +container +" "+command;
             console.log(cmd);
-            var outcome; 
-            var strOutcome="";
-            try{
-               console.log(cmd);
-               outcome=child_process.execSync(cmd);
-               console.log(outcome);
-               strOutcome=decoder.write(outcome);
-               console.log(strOutcome);
-            }catch(err){
-               console.log(decoder.write(err.stderr));
-               strOutcome=decoder.write(err.stderr);
+            child_process.execSync(cmd,function(error,stdout,stderr){
+               if(error!=null){
+                  msg.payload.error=stderr;
+                  node.send(msg);
+                  return;
+               }else{
+                  if(noContainer.test(stdout)){
+                     console.log("didn't exist");
+                     msg.payload.container="None";
+                  }else{
+                       console.log("did exist");
+                       msg.payload.results=stdout;
 
-            }
+                  }
+                  node.send(msg);
+               }
+            });
             //console.log(strOutcome);
             console.log("----------");
             
-           if(noContainer.test(strOutcome)){
-               console.log("didn't exist");
-               msg.payload.container="None";
-            }else{
-                 console.log("did exist");
-                 msg.payload.results=strOutcome;
-
-            }
-           
-            node.send(msg);
-        });
+                   });
     }
     RED.nodes.registerType("execute",ExecuteNode);
 }
