@@ -9,7 +9,7 @@ chmod 755 /usr/bin/pipework
 apt-get install mongodb
 
 ADD lan network interfaces
-```
+```bash
 for i in `seq 2 12`
    do 
    ip link add link $LAN_INTERFACE $LAN_INTERFACE.$i type vlan proto 802.1ad id $i
