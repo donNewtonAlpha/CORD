@@ -22,6 +22,17 @@
 </script>
 
 <script type="text/x-red" data-help-name="execute">
-    <p>A simple node that converts the message payloads into all lower-case characters</p>
+    <p>A node that stops a docker container.</p>
+    <p>Requires:</p>
+    <p><code>payload.Service</code> Name of service.</p>
+    <p><code>payload.S_Tag</code> QinQ Service <code>802.1ad</code>tag of container.</p>
+    <p><code>payload.C_Tag</code> QinQ Customer <code>802.1q</code>tag of container.</p>
+    <p><code>payload.command</code> command to be executed in container.</p>
+   <code>{</code><br>
+   &nbsp &nbsp &nbsp<code>   "Service":"vSG",</code><br>
+   &nbsp &nbsp &nbsp<code>   "S_Tag":5,</code><br>
+   &nbsp &nbsp &nbsp<code>   "C_Tag":7</code><br>
+   &nbsp &nbsp &nbsp<code>   "command":"ls"</code><br>
+   <code>}</code>
 </script>
 
