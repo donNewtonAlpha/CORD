@@ -11,28 +11,23 @@ module.exports = function(RED) {
             var container=msg.payload.Service+"_"+msg.payload.S_Tag+"_"+msg.payload.C_Tag;
             cmd="docker logs " +container;
             console.log(cmd);
-            var outcome; 
-            var strOutcome="";
-            try{
-               outcome=child_process.execSync(cmd);
-               strOutcome=decoder.write(outcome);
-            }catch(err){
-               console.log(decoder.write(err.stderr));
-               strOutcome=decoder.write(err.stderr);
-
-            }
-            //console.log(strOutcome);
-            console.log("----------");
-            
-           if(noContainer.test(strOutcome)){
-               console.log("didn't exist");
-               msg.payload.container="None";
-            }else{
-                 console.log("did exist");
-                 msg.payload.logs=strOutcome;
-            }
-           
-            node.send(msg);
+            child_process.exec(cmd,function(error,stdout,stderr){
+               if(error!=null){
+                   console.log(stderr);
+                   msg.payload.error=stderr;
+                   node.send(msg);
+                   return;
+               }else{
+                 if(noContainer.test(stdout)){
+                     console.log("didn't exist");
+                     msg.payload.container="None";
+                  }else{
+                       console.log("did exist");
+                       msg.payload.logs=stdout;
+                  }
+                  node.send(msg);
+               }
+            });
         });
     }
     RED.nodes.registerType("logs",LogsNode);
