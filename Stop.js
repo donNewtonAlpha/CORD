@@ -10,11 +10,15 @@ module.exports = function(RED) {
             var cmd=["docker stop " + container]; 
             console.log(cmd);
             
-            var outcome=child_process.execSync(cmd);
-            console.log(decoder.write(outcome));
-            msg.payload.container="stopped";
-            msg.payload.result=decoder.write(outcome);
-            node.send(msg);
+            var outcome=child_process.exec(cmd,function(error,stdout,stderr){
+               if(error!=null){
+                  msg.payload.error=stderr;
+               }else{
+                  msg.payload.container="stopped";
+                  msg.payload.result=stdout;
+               }
+               node.send(msg);
+            });
         });
     }
     RED.nodes.registerType("stop",StopNode);

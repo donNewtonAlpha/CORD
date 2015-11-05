@@ -12,7 +12,7 @@ module.exports = function(RED) {
             var command=msg.payload.command;
             cmd="docker exec " +container +" "+command;
             console.log(cmd);
-            child_process.execSync(cmd,function(error,stdout,stderr){
+            child_process.exec(cmd,function(error,stdout,stderr){
                if(error!=null){
                   msg.payload.error=stderr;
                   node.send(msg);
@@ -30,9 +30,7 @@ module.exports = function(RED) {
                }
             });
             //console.log(strOutcome);
-            console.log("----------");
-            
-                   });
+        });
     }
     RED.nodes.registerType("execute",ExecuteNode);
 }

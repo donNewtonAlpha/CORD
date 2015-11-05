@@ -115,16 +115,6 @@ module.exports = function(RED) {
               
                node.send(msg);   }
             });
-            try{
-               outcome=child_process.execSync(cmd);
-               strOutcome=decoder.write(outcome);
-            }catch(err){
-               console.log(decoder.write(err.stderr));
-               strOutcome=decoder.write(err.stderr);
-
-            }
-            
-           
         });
     }
     RED.nodes.registerType("ifconfig",IfconfigNode);

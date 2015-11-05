@@ -13,44 +13,39 @@ module.exports = function(RED) {
             console.log(cmd);
             var outcome; 
             var strOutcome="";
-            try{
-               outcome=child_process.execSync(cmd);
-               strOutcome=decoder.write(outcome);
-            }catch(err){
-               console.log(decoder.write(err.stderr));
-               strOutcome=decoder.write(err.stderr);
+            outcome=child_process.exec(cmd,function(error,stdout,stderr){
+               if(error!=null){
+                  console.log(stderr);
+                  msg.payload.error=stderr;
+                  node.send(msg);
+                  return;
+               }else{
+                 if(noContainer.test(stdout)){
+                     console.log("didn't exist");
+                     msg.payload.container="None";
+                 }else{
+                    var stats=new Object();
+                    console.log("did exist");
+                    var lines = stdout.split('\n');
+                    if(lines.length<2)
+                       return "err";
+                    for(var i=0;i<lines.length;i++){
+                       lines[i]=lines[i].replace(/   */gi,"|");
+                     }
+                     var key_line=lines[0];
+                     var val_line=lines[1];
+                     var keys=key_line.split('|');
+                     var vals=val_line.split('|');
 
-            }
-            //console.log(strOutcome);
-            console.log("----------");
-            
-           if(noContainer.test(strOutcome)){
-               console.log("didn't exist");
-               msg.payload.container="None";
-            }else{
-                 console.log("did exist");
-                 var lines = strOutcome.split('\n');
-			if(lines.length<2)
-			   return "err";
-			for(var i=0;i<lines.length;i++){
-			   lines[i]=lines[i].replace(/   */gi,"|");
-			}
-
-			var key_line=lines[0];
-			var val_line=lines[1];
-			var keys=key_line.split('|');
-			var vals=val_line.split('|');
-
-			var stats=new Object();
-			for(var j=0;j<keys.length;j++){
-			   stats[keys[j]]=vals[j];
-			   console.log(keys[j]+':'+vals[j]);
-	                }
-			msg.payload.stats=stats;
-
-            }
-           
-            node.send(msg);
+                     for(var j=0;j<keys.length;j++){
+                        stats[keys[j]]=vals[j];
+                        console.log(keys[j]+':'+vals[j]);
+                     }
+                     msg.payload.stats=stats;
+                  }
+                  node.send(msg);
+               }
+            });
         });
     }
     RED.nodes.registerType("stats",StatsNode);
