@@ -3,6 +3,11 @@
 
 ##Installation Steps
 ###Ubuntu
+####Install Latest Docker
+```bash
+curl -sSL https://experimental.docker.com/ | sh
+```
+
 ####Install Latest Node
 ```bash
 apt-get install curl
