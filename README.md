@@ -58,3 +58,6 @@ nohup node-red 2>&1 &
 
 http://$NODE_RED_IP:1880
 
+####Load Application
+copy contents of application.js and paste into import window.
+After import click Deploy button
