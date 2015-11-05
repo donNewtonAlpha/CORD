@@ -31,9 +31,7 @@ sudo chmod 755 /usr/bin/pipework
 ####Install prerequisite nodes and CORD nodes
 ```bash
 cd $NODE_RED_NODE_DIR
-```
- *cd /usr/lib/node_modules/node-red/nodes/*
-```bash
+Most likely /usr/lib/node_modules/node-red/nodes/
 sudo npm install node-red-contrib-mongodb2
 sudo npm install dockerode
 sudo git clone https://github.com/donNewtonAlpha/CORD.git
