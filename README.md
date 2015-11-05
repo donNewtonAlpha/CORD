@@ -32,7 +32,7 @@ sudo chmod 755 /usr/bin/pipework
 ```bash
 cd $NODE_RED_NODE_DIR
 ```
- **cd /usr/lib/node_modules/node-red/nodes/**
+ *cd /usr/lib/node_modules/node-red/nodes/*
 ```bash
 sudo npm install node-red-contrib-mongodb2
 sudo npm install dockerode
