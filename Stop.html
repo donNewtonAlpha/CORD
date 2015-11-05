@@ -1,13 +1,13 @@
 <script type="text/javascript">
     RED.nodes.registerType('stop',{
         category: 'Docker',
-        color: '#a6bbcf',
+        color: '#F6CEF5',
         defaults: {
             name: {value:""}
         },
         inputs:1,
         outputs:1,
-        icon: "file.png",
+        icon: "docker.png",
         label: function() {
             return this.name||"stop";
         }
@@ -22,6 +22,15 @@
 </script>
 
 <script type="text/x-red" data-help-name="stop">
-    <p>A simple node that converts the message payloads into all lower-case characters</p>
+    <p>A node that stops a docker container.</p>
+    <p>Requires:</p>
+    <p><code>payload.Service</code> Name of service being stopped.</p>
+    <p><code>payload.S_Tag</code> QinQ Service <code>802.1ad</code>tag of service being stopped.</p>
+    <p><code>payload.C_Tag</code> QinQ Customer <code>802.1q</code>tag of service being stopped.</p>
+   <code>{</code><br>
+   &nbsp &nbsp &nbsp<code>   "Service":"vSG",</code><br>
+   &nbsp &nbsp &nbsp<code>   "S_Tag":5,</code><br>
+   &nbsp &nbsp &nbsp<code>   "C_Tag":7</code><br>
+   <code>}</code>
 </script>
 
