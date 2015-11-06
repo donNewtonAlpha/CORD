@@ -24,7 +24,7 @@ sudo apt-get install mongodb
 ####Install pipework
 ```bash
 sudo git clone https://github.com/jpetazzo/pipework.git
-cp pipework /usr/bin/.
+sudo cp pipework /usr/bin/.
 sudo chmod 755 /usr/bin/pipework
 ```
 
