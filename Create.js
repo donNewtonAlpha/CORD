@@ -9,10 +9,22 @@ module.exports = function(RED) {
         this.on('input', function(msg) {
             var container=msg.payload.Service+"_"+msg.payload.S_Tag+"_"+msg.payload.C_Tag;
             var cmd;
+            var args,cmd,rm;
+            if(msg.payload.CmdLine!=null){
+               args=msg.payload.CmdLine.args;
+               cmd=msg.payload.CmdLine.cmd;
+            }
+            if(msg.payload.rm==true){
+               rm=" --rm ";
+            }else{
+               rm=" -d ";
+            }
+
+            
             if(msg.payload.Service.toLowerCase()=="vsg"){
                 cmd="docker run --net=none --privileged=true -d vsg";
             }else{
-               cmd="docker run -d --net=none " + msg.payload.Service.toLowerCase(); 
+               cmd="docker run"+rm+"--net=none " + msg.payload.Service.toLowerCase()+ " "+cmd+" "+args; 
             }
             console.log(cmd);
             
