@@ -7,7 +7,7 @@ module.exports = function(RED) {
         var node = this;
 
         this.on('input', function(msg) {
-            var container=msg.payload.Service+"_"+msg.payload.S_Tag+"_"+msg.payload.C_Tag;
+            var container=msg.payload.Service.toLowerCase()+"_"+msg.payload.S_Tag+"_"+msg.payload.C_Tag;
             var cmd;
             var args,cmd,rm;
             if(msg.payload.CmdLine!=null){
@@ -24,7 +24,12 @@ module.exports = function(RED) {
             if(msg.payload.Service.toLowerCase()=="vsg"){
                 cmd="docker run --net=none --privileged=true -d vsg";
             }else{
-               cmd="docker run"+rm+"--net=none " + msg.payload.Service.toLowerCase()+ " "+cmd+" "+args; 
+               var interfaces=msg.payload.Interfaces;
+               if(interfaces.indexOf("wan")>=0){
+                  cmd="docker run"+rm+"--net=container:vsg_"+msg.payload.S_Tag+"_"+msg.payload.C_Tag+" "+ msg.payload.Service.toLowerCase()+ " "+cmd+" "+args; 
+               }else{
+                  cmd="docker run"+rm+"--net=none"+ msg.payload.Service.toLowerCase()+ " "+cmd+" "+args; 
+               }
             }
             console.log(cmd);
             
@@ -38,7 +43,7 @@ module.exports = function(RED) {
 		       node.send(msg);
 		       return;
                     }
-		    cmd="docker rename " + strOutcome.trim() + " "+container;
+		    cmd="docker rename " + strOutcome.trim()+ " "+container;
 		    console.log(cmd);
 		    child_process.exec(cmd,function(error,stdout,stderr){
                             console.log("stdout:"+stdout);

@@ -8,7 +8,7 @@ module.exports = function(RED) {
         var node = this;
 
         this.on('input', function(msg) {
-            var container=msg.payload.Service+"_"+msg.payload.S_Tag+"_"+msg.payload.C_Tag;
+            var container=msg.payload.Service.toLowerCase()+"_"+msg.payload.S_Tag+"_"+msg.payload.C_Tag;
             var command=msg.payload.command;
             cmd="docker exec " +container +" "+command;
             console.log(cmd);
