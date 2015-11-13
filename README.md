@@ -60,13 +60,20 @@ ip link set $WAN_INTERFACE up
 exit
 ```
 
-####Start Node-red
+####Start Node-red and reset flow file
 ```bash
 sudo nohup node-red 2>&1 &
+
+#ensure flow-file create
+ls $HOME/.node-red/flows_$HOSTNAME.json
+rm $HOME/.node-red/flows_$HOSTNAME.json
+#sym link application.js
+ln -s /usr/lib/node_modules/node-red/nodes/CORD/application.js flows_mesos2.json $HOME/.node-red/flows_$HOSTNAME.json
+#restart
+$HOME/.node-red/flows_$HOSTNAME.json
 ```
 
-http://$NODE_RED_IP:1880
 
-####Load Application
-copy contents of application.js and paste into import window.
-After import click Deploy button
+in webbrowser open http://$NODE_RED_IP:1880
+and verify application is loaded
+
