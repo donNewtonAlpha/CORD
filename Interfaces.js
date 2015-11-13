@@ -26,10 +26,9 @@ module.exports = function(RED) {
                            console.log(cmd+" "+stderr);
                            msg.payload.error=stderr;
                            node.send(msg);
-                           return;
                         }else{
                             console.log("created wan interface");
-                            var cmd="pipework "+hostInterfaces["lan"]+" -i eth"+interfaces.indexOf("lan")+" "+container+" udhcpc 76:eb:27:f6:47:f1";
+                            var cmd="pipework "+hostInterfaces["lan"]+"."+msg.payload.S_Tag+"."+msg.payload.C_Tag+" -i eth"+interfaces.indexOf("lan")+" "+container+" udhcpc 76:eb:27:f6:47:f1";
                             console.log(cmd);
                             child_process.exec(cmd,function(error,stdout,stderr){
                                  if(error!=null){
