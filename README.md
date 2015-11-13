@@ -68,7 +68,7 @@ sudo nohup node-red 2>&1 &
 ls $HOME/.node-red/flows_$HOSTNAME.json
 rm $HOME/.node-red/flows_$HOSTNAME.json
 #sym link application.js
-ln -s /usr/lib/node_modules/node-red/nodes/CORD/application.js flows_mesos2.json $HOME/.node-red/flows_$HOSTNAME.json
+ln -s /usr/lib/node_modules/node-red/nodes/CORD/application.js $HOME/.node-red/flows_$HOSTNAME.json
 #restart
 sudo nohup node-red 2>&1 &
 ```
